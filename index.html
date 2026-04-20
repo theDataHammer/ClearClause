@@ -1,355 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>ClearClause — Supplier Contract Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<meta name="description" content="AI-powered supplier contract assessment and ongoing controls register. Know exactly what you're signing — before you sign it."/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
 <style>
-:root {
-  --ink: #0e1117;
-  --ink-soft: #3b3f4a;
-  --ink-muted: #717585;
-  --paper: #f7f5f0;
-  --paper-warm: #ede9e0;
-  --rule: #d6d1c8;
-  --accent: #1a4f8a;
-  --accent-pale: #dfe8f3;
-  --accent-mid: #3a72b8;
-  --warn: #b84a1a;
-  --warn-pale: #f5ede8;
-  --ok: #1a7a4a;
-  --ok-pale: #e2f2ea;
-  --amber: #8a6a1a;
-  --amber-pale: #f5eed5;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --sans: 'DM Sans', system-ui, sans-serif;
-  --r: 6px;
-  --r-lg: 12px;
+.hero{padding:100px 5vw 80px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.hero-eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:16px;}
+.hero-title{font-family:var(--serif);font-size:clamp(36px,4.5vw,56px);line-height:1.1;color:var(--ink);margin-bottom:22px;letter-spacing:-0.02em;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-body{font-size:17px;color:var(--ink-soft);line-height:1.7;margin-bottom:32px;font-weight:300;}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;}
+.hero-visual{background:#fff;border:1px solid var(--rule);border-radius:var(--r-lg);padding:24px;box-shadow:0 4px 28px rgba(14,17,23,0.08);}
+.hv-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;}
+.hv-supplier-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.hv-logo{width:38px;height:38px;border-radius:6px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--accent);background:var(--accent-pale);}
+.hv-name{font-size:15px;font-weight:500;color:var(--ink);}
+.hv-sub{font-size:12px;color:var(--ink-muted);}
+.hv-divider{height:1px;background:var(--rule);margin:14px 0;}
+.hv-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.hv-clause{font-size:13px;color:var(--ink-soft);}
+.hv-steps{display:flex;align-items:center;justify-content:center;gap:0;margin:40px 0 32px;}
+.hv-step{display:flex;align-items:center;gap:0;}
+.hv-step-circle{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0;}
+.hv-step-label{font-size:13px;color:var(--ink-soft);margin-left:8px;white-space:nowrap;}
+.hv-step-line{width:40px;height:1px;background:var(--rule);margin:0 12px;}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;}
+.step-card{background:#fff;border:1px solid var(--rule);border-radius:var(--r-lg);padding:28px 24px;position:relative;overflow:hidden;}
+.step-card::before{content:attr(data-n);position:absolute;top:-10px;right:16px;font-family:var(--serif);font-size:80px;color:var(--paper-warm);line-height:1;pointer-events:none;}
+.step-num{font-size:11px;font-weight:500;color:var(--accent);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+.step-title{font-size:17px;font-weight:500;color:var(--ink);margin-bottom:10px;line-height:1.3;}
+.step-body{font-size:14px;color:var(--ink-soft);line-height:1.65;font-weight:300;}
+.suppliers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
+.supplier-card{background:#fff;border:1px solid var(--rule);border-radius:var(--r-lg);padding:24px;cursor:pointer;transition:border-color 0.15s,box-shadow 0.15s;text-decoration:none;display:block;}
+.supplier-card:hover{border-color:var(--accent);box-shadow:0 2px 16px rgba(26,79,138,0.1);}
+.sc-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.sc-logo{width:44px;height:44px;border-radius:8px;border:1px solid var(--rule);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;}
+.sc-ms{background:#fff3e0;color:#c55a00;}
+.sc-aws{background:#fff8e0;color:#8a6000;}
+.sc-gcp{background:#e8f0fe;color:#1a47a3;}
+.sc-name{font-size:16px;font-weight:500;color:var(--ink);}
+.sc-industry{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+.sc-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.sc-tag{font-size:11px;padding:3px 8px;border-radius:20px;background:var(--paper-warm);color:var(--ink-soft);border:1px solid var(--rule);}
+.sc-action{font-size:13px;color:var(--accent);font-weight:500;}
+.sc-contract-link{font-size:11px;color:var(--ink-muted);margin-top:6px;}
+.sc-contract-link a{color:var(--accent-mid);text-decoration:none;}
+.sc-contract-link a:hover{text-decoration:underline;}
+.features-wrap{background:var(--paper-warm);padding:80px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.features-inner{max-width:1100px;margin:0 auto;padding:0 5vw;}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
+.feat-card{background:#fff;border:1px solid var(--rule);border-radius:var(--r-lg);padding:24px;}
+.feat-icon{font-size:22px;margin-bottom:14px;}
+.feat-title{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:8px;}
+.feat-body{font-size:14px;color:var(--ink-soft);line-height:1.65;font-weight:300;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
+.price-card{background:#fff;border:1px solid var(--rule);border-radius:var(--r-lg);padding:28px 24px;}
+.price-card.featured{border-color:var(--accent);border-width:2px;}
+.price-featured-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);background:var(--accent-pale);padding:4px 10px;border-radius:20px;display:inline-block;margin-bottom:14px;}
+.price-plan{font-size:14px;font-weight:500;color:var(--ink-muted);margin-bottom:8px;}
+.price-amount{font-family:var(--serif);font-size:38px;color:var(--ink);line-height:1;margin-bottom:4px;}
+.price-period{font-size:13px;color:var(--ink-muted);margin-bottom:18px;}
+.price-features{list-style:none;margin-bottom:22px;}
+.price-features li{font-size:13px;color:var(--ink-soft);padding:5px 0;border-bottom:1px solid var(--paper-warm);display:flex;gap:8px;}
+.price-features li::before{content:'✓';color:var(--ok);font-weight:500;flex-shrink:0;}
+.testimonial-wrap{background:var(--ink);padding:80px 0;}
+.testimonial-inner{max-width:1100px;margin:0 auto;padding:0 5vw;}
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
+.testimonial-card{background:#1a2130;border:1px solid #2a3344;border-radius:var(--r-lg);padding:24px;}
+.t-quote{font-family:var(--serif);font-size:16px;color:#d8e4f0;line-height:1.65;margin-bottom:18px;font-style:italic;}
+.t-author{font-size:13px;color:#7aabde;font-weight:500;}
+.t-role{font-size:12px;color:#4a5568;margin-top:2px;}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:48px;}
+.stat-card{background:#1a2130;border:1px solid #2a3344;border-radius:var(--r-lg);padding:24px;text-align:center;}
+.stat-number{font-family:var(--serif);font-size:36px;color:#7aabde;line-height:1;margin-bottom:6px;}
+.stat-label{font-size:13px;color:#6b7585;}
+.cta-band{background:var(--accent);padding:64px 5vw;text-align:center;}
+.cta-band h2{font-family:var(--serif);font-size:clamp(28px,3vw,40px);color:#fff;margin-bottom:14px;}
+.cta-band p{font-size:16px;color:rgba(255,255,255,0.78);margin-bottom:28px;font-weight:300;}
+.cta-band .btn-primary{background:#fff;color:var(--accent);}
+.cta-band .btn-primary:hover{background:#dfe8f3;}
+@media(max-width:768px){
+  .hero{grid-template-columns:1fr;}
+  .hero-visual{display:none;}
+  .steps,.suppliers-grid,.features-grid,.pricing-grid,.testimonials-grid,.stat-row{grid-template-columns:1fr;}
+  .hv-steps{flex-wrap:wrap;gap:12px;}
+  .hv-step-line{display:none;}
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { font-family: var(--sans); background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; }
-
-/* NAV */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(247,245,240,0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--rule);
-  padding: 0 5vw;
-  display: flex; align-items: center; justify-content: space-between;
-  height: 60px;
-}
-.nav-logo { font-family: var(--serif); font-size: 22px; color: var(--ink); letter-spacing: -0.01em; }
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 28px; align-items: center; }
-.nav-links a { font-size: 14px; color: var(--ink-soft); text-decoration: none; font-weight: 400; transition: color 0.15s; }
-.nav-links a:hover { color: var(--ink); }
-.nav-cta {
-  background: var(--accent); color: #fff !important;
-  padding: 8px 18px; border-radius: var(--r); font-weight: 500 !important;
-  font-size: 13px !important;
-}
-.nav-cta:hover { background: var(--accent-mid) !important; color: #fff !important; }
-
-/* HERO */
-.hero {
-  padding: 100px 5vw 80px;
-  max-width: 1100px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
-}
-.hero-eyebrow {
-  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--accent); font-weight: 500; margin-bottom: 16px;
-}
-.hero-title {
-  font-family: var(--serif); font-size: clamp(36px, 4.5vw, 54px);
-  line-height: 1.12; color: var(--ink); margin-bottom: 22px;
-  letter-spacing: -0.02em;
-}
-.hero-title em { font-style: italic; color: var(--accent); }
-.hero-body { font-size: 17px; color: var(--ink-soft); line-height: 1.7; margin-bottom: 32px; font-weight: 300; }
-.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-.btn-primary {
-  background: var(--accent); color: #fff; padding: 12px 24px;
-  border-radius: var(--r); font-family: var(--sans); font-size: 15px; font-weight: 500;
-  text-decoration: none; border: none; cursor: pointer; transition: background 0.15s;
-  display: inline-block;
-}
-.btn-primary:hover { background: var(--accent-mid); }
-.btn-outline {
-  background: transparent; color: var(--ink); padding: 12px 24px;
-  border-radius: var(--r); font-family: var(--sans); font-size: 15px; font-weight: 400;
-  text-decoration: none; border: 1px solid var(--rule); cursor: pointer; transition: border-color 0.15s;
-  display: inline-block;
-}
-.btn-outline:hover { border-color: var(--ink-muted); }
-
-.hero-visual {
-  background: #fff;
-  border: 1px solid var(--rule);
-  border-radius: var(--r-lg);
-  padding: 24px;
-  box-shadow: 0 4px 24px rgba(14,17,23,0.07);
-}
-.hv-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px; }
-.hv-supplier-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-.hv-logo {
-  width: 36px; height: 36px; border-radius: 6px; border: 1px solid var(--rule);
-  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500;
-  color: var(--accent); background: var(--accent-pale);
-}
-.hv-name { font-size: 15px; font-weight: 500; color: var(--ink); }
-.hv-sub { font-size: 12px; color: var(--ink-muted); }
-.hv-divider { height: 1px; background: var(--rule); margin: 14px 0; }
-.hv-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.hv-row:last-child { margin-bottom: 0; }
-.hv-clause { font-size: 13px; color: var(--ink-soft); }
-.badge {
-  font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 20px;
-  letter-spacing: 0.04em;
-}
-.badge-red { background: var(--warn-pale); color: var(--warn); }
-.badge-amber { background: var(--amber-pale); color: var(--amber); }
-.badge-green { background: var(--ok-pale); color: var(--ok); }
-.badge-blue { background: var(--accent-pale); color: var(--accent); }
-
-/* TRUST BAR */
-.trust-bar {
-  background: var(--paper-warm); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-  padding: 20px 5vw;
-  display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap;
-}
-.trust-item { font-size: 13px; color: var(--ink-muted); display: flex; align-items: center; gap: 8px; }
-.trust-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-
-/* HOW IT WORKS */
-.section { padding: 80px 5vw; max-width: 1100px; margin: 0 auto; }
-.section-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 10px; }
-.section-title { font-family: var(--serif); font-size: clamp(28px, 3vw, 40px); line-height: 1.18; color: var(--ink); margin-bottom: 16px; }
-.section-body { font-size: 16px; color: var(--ink-soft); max-width: 560px; line-height: 1.7; font-weight: 300; }
-
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
-.step-card {
-  background: #fff; border: 1px solid var(--rule); border-radius: var(--r-lg);
-  padding: 28px 24px; position: relative; overflow: hidden;
-}
-.step-card::before {
-  content: attr(data-n);
-  position: absolute; top: -10px; right: 16px;
-  font-family: var(--serif); font-size: 80px; color: var(--paper-warm);
-  line-height: 1; pointer-events: none;
-}
-.step-num { font-size: 11px; font-weight: 500; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
-.step-title { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
-.step-body { font-size: 14px; color: var(--ink-soft); line-height: 1.65; font-weight: 300; }
-
-/* PILOT SUPPLIERS */
-.suppliers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-.supplier-card {
-  background: #fff; border: 1px solid var(--rule); border-radius: var(--r-lg);
-  padding: 24px; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s;
-}
-.supplier-card:hover { border-color: var(--accent); box-shadow: 0 2px 16px rgba(26,79,138,0.1); }
-.sc-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
-.sc-logo {
-  width: 44px; height: 44px; border-radius: 8px; border: 1px solid var(--rule);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--serif); font-size: 14px; font-weight: 400;
-}
-.sc-ms { background: #fff3e0; color: #c55a00; }
-.sc-aws { background: #fff8e0; color: #8a6000; }
-.sc-gcp { background: #e8f0fe; color: #1a47a3; }
-.sc-name { font-size: 16px; font-weight: 500; color: var(--ink); }
-.sc-industry { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
-.sc-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.sc-tag { font-size: 11px; padding: 3px 8px; border-radius: 20px; background: var(--paper-warm); color: var(--ink-soft); border: 1px solid var(--rule); }
-.sc-action {
-  font-size: 13px; color: var(--accent); font-weight: 500;
-  text-decoration: none; display: flex; align-items: center; gap: 4px;
-}
-.sc-action::after { content: '→'; }
-.sc-contract-link { font-size: 11px; color: var(--ink-muted); margin-top: 6px; }
-.sc-contract-link a { color: var(--accent-mid); text-decoration: none; }
-.sc-contract-link a:hover { text-decoration: underline; }
-
-/* APP SECTION */
-.app-section {
-  background: var(--ink); padding: 80px 5vw;
-}
-.app-inner { max-width: 1100px; margin: 0 auto; }
-.app-section .section-label { color: #7aabde; }
-.app-section .section-title { color: #fff; }
-.app-section .section-body { color: #9ba5b8; }
-
-.app-card {
-  background: #fff; border-radius: var(--r-lg);
-  overflow: hidden; margin-top: 48px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-}
-.app-tabs { display: flex; border-bottom: 1px solid var(--rule); background: var(--paper); }
-.app-tab {
-  padding: 14px 24px; font-size: 14px; font-family: var(--sans);
-  color: var(--ink-muted); border: none; background: transparent;
-  cursor: pointer; border-bottom: 2px solid transparent; font-weight: 400;
-  transition: all 0.15s; margin-bottom: -1px;
-}
-.app-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
-.app-panel { padding: 32px; display: none; }
-.app-panel.active { display: block; }
-
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group label { font-size: 12px; font-weight: 500; color: var(--ink-soft); letter-spacing: 0.04em; text-transform: uppercase; }
-.form-group select, .form-group input {
-  font-family: var(--sans); font-size: 14px; padding: 10px 12px;
-  border: 1px solid var(--rule); border-radius: var(--r);
-  background: #fff; color: var(--ink); outline: none;
-  transition: border-color 0.15s;
-}
-.form-group select:focus, .form-group input:focus { border-color: var(--accent); }
-
-.run-btn {
-  background: var(--accent); color: #fff; padding: 11px 28px;
-  border-radius: var(--r); font-family: var(--sans); font-size: 14px; font-weight: 500;
-  border: none; cursor: pointer; transition: background 0.15s; margin-top: 8px;
-}
-.run-btn:hover:not(:disabled) { background: var(--accent-mid); }
-.run-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.loading-row { display: flex; align-items: center; gap: 10px; padding: 14px 0; font-size: 13px; color: var(--ink-muted); }
-.spin { width: 14px; height: 14px; border: 2px solid var(--rule); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.65s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.result-header-bar {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  padding-bottom: 16px; border-bottom: 1px solid var(--rule); margin-bottom: 20px;
-}
-.r-supplier-name { font-size: 20px; font-weight: 500; color: var(--ink); }
-.r-meta { font-size: 12px; color: var(--ink-muted); margin-top: 3px; }
-.risk-pill { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 20px; }
-.risk-high { background: var(--warn-pale); color: var(--warn); }
-.risk-medium { background: var(--amber-pale); color: var(--amber); }
-.risk-low { background: var(--ok-pale); color: var(--ok); }
-
-.r-section { margin-bottom: 22px; }
-.r-section-title { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted); font-weight: 500; margin-bottom: 10px; }
-.chip-group { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--rule); color: var(--ink-soft); background: var(--paper); }
-.chip-primary { background: var(--accent-pale); border-color: #b5ccdf; color: var(--accent); }
-
-.gap-list { list-style: none; }
-.gap-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--paper-warm); font-size: 14px; line-height: 1.55; }
-.gap-item:last-child { border-bottom: none; }
-.sev-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
-.d-critical { background: var(--warn); }
-.d-moderate { background: #d4840a; }
-.d-advisory { background: var(--accent-mid); }
-.gap-clause { font-weight: 500; color: var(--ink); }
-.gap-detail { color: var(--ink-soft); font-weight: 300; }
-
-.controls-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 0; }
-.controls-table th { text-align: left; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); padding: 8px 12px; border-bottom: 1px solid var(--rule); font-weight: 500; }
-.controls-table td { padding: 10px 12px; border-bottom: 1px solid var(--paper-warm); color: var(--ink-soft); vertical-align: top; line-height: 1.5; }
-.controls-table tr:last-child td { border-bottom: none; }
-.controls-table tr:hover td { background: var(--paper); }
-.freq-badge { font-size: 10px; padding: 2px 7px; border-radius: 20px; font-weight: 500; }
-.freq-monthly { background: var(--accent-pale); color: var(--accent); }
-.freq-quarterly { background: var(--amber-pale); color: var(--amber); }
-.freq-annual { background: var(--ok-pale); color: var(--ok); }
-.freq-event { background: var(--warn-pale); color: var(--warn); }
-
-.prose { font-size: 14px; color: var(--ink-soft); line-height: 1.75; font-weight: 300; }
-.action-bar { display: flex; gap: 8px; padding-top: 20px; border-top: 1px solid var(--rule); margin-top: 8px; flex-wrap: wrap; }
-.act-btn { font-size: 13px; padding: 8px 16px; border-radius: var(--r); border: 1px solid var(--rule); background: transparent; color: var(--ink-soft); cursor: pointer; font-family: var(--sans); transition: all 0.15s; }
-.act-btn:hover { border-color: var(--accent); color: var(--accent); }
-.act-btn-primary { background: var(--accent); color: #fff !important; border-color: var(--accent) !important; }
-.act-btn-primary:hover { background: var(--accent-mid) !important; }
-
-/* FEATURES */
-.features-wrap { background: var(--paper-warm); padding: 80px 0; }
-.features-inner { max-width: 1100px; margin: 0 auto; padding: 0 5vw; }
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-.feat-card { background: #fff; border: 1px solid var(--rule); border-radius: var(--r-lg); padding: 24px; }
-.feat-icon { font-size: 22px; margin-bottom: 14px; }
-.feat-title { font-size: 15px; font-weight: 500; color: var(--ink); margin-bottom: 8px; }
-.feat-body { font-size: 14px; color: var(--ink-soft); line-height: 1.65; font-weight: 300; }
-
-/* PRICING */
-.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 48px; }
-.price-card { background: #fff; border: 1px solid var(--rule); border-radius: var(--r-lg); padding: 28px 24px; }
-.price-card.featured { border-color: var(--accent); border-width: 2px; }
-.price-featured-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); background: var(--accent-pale); padding: 4px 10px; border-radius: 20px; display: inline-block; margin-bottom: 14px; }
-.price-plan { font-size: 14px; font-weight: 500; color: var(--ink-muted); margin-bottom: 8px; }
-.price-amount { font-family: var(--serif); font-size: 38px; color: var(--ink); line-height: 1; margin-bottom: 4px; }
-.price-period { font-size: 13px; color: var(--ink-muted); margin-bottom: 18px; }
-.price-features { list-style: none; margin-bottom: 22px; }
-.price-features li { font-size: 13px; color: var(--ink-soft); padding: 5px 0; border-bottom: 1px solid var(--paper-warm); display: flex; gap: 8px; }
-.price-features li::before { content: '✓'; color: var(--ok); font-weight: 500; flex-shrink: 0; }
-
-/* FOOTER */
-footer {
-  background: var(--ink); color: #9ba5b8; padding: 48px 5vw;
-  display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px;
-}
-.footer-brand { font-family: var(--serif); font-size: 20px; color: #fff; margin-bottom: 8px; }
-.footer-brand span { color: #7aabde; }
-.footer-tagline { font-size: 13px; color: #6b7585; max-width: 260px; line-height: 1.6; }
-.footer-links { display: flex; gap: 40px; flex-wrap: wrap; }
-.footer-col h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #fff; font-weight: 500; margin-bottom: 12px; }
-.footer-col a { display: block; font-size: 13px; color: #6b7585; text-decoration: none; margin-bottom: 8px; transition: color 0.15s; }
-.footer-col a:hover { color: #9ba5b8; }
-.footer-bottom { background: #080b10; padding: 16px 5vw; text-align: center; font-size: 12px; color: #434a58; }
-
-/* ERROR */
-.err-msg { font-size: 13px; color: var(--warn); background: var(--warn-pale); padding: 10px 14px; border-radius: var(--r); margin-top: 10px; }
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .hero { grid-template-columns: 1fr; }
-  .steps, .suppliers-grid, .features-grid, .pricing-grid { grid-template-columns: 1fr; }
-  .form-row { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
-}
-
-/* ANIMATIONS */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-.hero-eyebrow, .hero-title, .hero-body, .hero-actions { animation: fadeUp 0.5s ease both; }
-.hero-eyebrow { animation-delay: 0.05s; }
-.hero-title { animation-delay: 0.12s; }
-.hero-body { animation-delay: 0.2s; }
-.hero-actions { animation-delay: 0.28s; }
-.hero-visual { animation: fadeUp 0.5s 0.18s ease both; }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">Clear<span>Clause</span></div>
+  <a href="index.html" class="nav-logo">Clear<span>Clause</span></a>
   <div class="nav-links">
-    <a href="#how-it-works">How it works</a>
-    <a href="#suppliers">Pilot suppliers</a>
-    <a href="#platform">Platform</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#platform" class="nav-cta">Try free assessment</a>
+    <a href="index.html#how-it-works">How it works</a>
+    <a href="index.html#suppliers">Suppliers</a>
+    <a href="about.html">About</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="contact.html">Contact</a>
+    <a href="assess.html" class="nav-cta">Start free assessment</a>
   </div>
+  <button class="nav-mobile-btn" onclick="document.querySelector('.nav-links').style.display='flex'">☰</button>
 </nav>
 
 <!-- HERO -->
-<section style="background: var(--paper);">
+<section style="background:var(--paper);">
   <div class="hero">
     <div>
-      <p class="hero-eyebrow">Supplier Contract Intelligence</p>
-      <h1 class="hero-title">Know what you're signing — <em>before</em> you sign it.</h1>
-      <p class="hero-body">ClearClause reads publicly available supplier contracts from Microsoft, AWS and Google Cloud and tells your clients exactly where the gaps are — then generates a controls register to manage the supplier for life.</p>
-      <div class="hero-actions">
-        <a href="#platform" class="btn-primary">Run a free assessment</a>
+      <p class="hero-eyebrow fade-up">AI-powered supplier contract intelligence</p>
+      <h1 class="hero-title fade-up delay-1">Know what you're signing — <em>before</em> you sign it.</h1>
+      <p class="hero-body fade-up delay-2">ClearClause reads publicly available supplier contracts from Microsoft, AWS and Google Cloud and tells your clients exactly where the gaps are — then generates a controls register to manage the supplier for life.</p>
+      <div class="hero-actions fade-up delay-3">
+        <a href="assess.html" class="btn-primary">Start free assessment →</a>
         <a href="#how-it-works" class="btn-outline">See how it works</a>
       </div>
     </div>
-    <div class="hero-visual">
+    <div class="hero-visual fade-up delay-2">
       <p class="hv-label">Live assessment preview</p>
       <div class="hv-supplier-row">
         <div class="hv-logo">AWS</div>
@@ -365,6 +135,10 @@ footer {
       <div class="hv-row"><span class="hv-clause">Termination for cause</span><span class="badge badge-green">Present</span></div>
       <div class="hv-row"><span class="hv-clause">Sub-processor obligations</span><span class="badge badge-red">Critical gap</span></div>
       <div class="hv-row"><span class="hv-clause">Audit rights</span><span class="badge badge-blue">Advisory</span></div>
+      <div class="hv-divider"></div>
+      <div style="text-align:center;padding-top:4px;">
+        <a href="assess.html" style="font-size:13px;color:var(--accent);font-weight:500;text-decoration:none;">Run your own assessment →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -372,8 +146,8 @@ footer {
 <!-- TRUST BAR -->
 <div class="trust-bar">
   <div class="trust-item"><span class="trust-dot"></span>Based on publicly published supplier contract terms</div>
-  <div class="trust-item"><span class="trust-dot"></span>Australian regulatory standards (Privacy Act, APRA CPS 234, ISO 27001)</div>
-  <div class="trust-item"><span class="trust-dot"></span>Assessment ready in under 60 seconds</div>
+  <div class="trust-item"><span class="trust-dot"></span>Australian regulatory standards — Privacy Act, APRA CPS 234, ISO 27001</div>
+  <div class="trust-item"><span class="trust-dot"></span>Full assessment in under 5 minutes</div>
   <div class="trust-item"><span class="trust-dot"></span>No legal expertise required</div>
 </div>
 
@@ -381,157 +155,98 @@ footer {
 <section id="how-it-works">
   <div class="section">
     <p class="section-label">How it works</p>
-    <h2 class="section-title">From contract review to ongoing control — in three steps.</h2>
-    <p class="section-body">ClearClause removes the guesswork from supplier contracting. Your clients get a structured, actionable output every time.</p>
+    <h2 class="section-title">Five steps from contract gaps to ongoing control.</h2>
+    <p class="section-body">ClearClause guides your clients through a structured, repeatable process — from first assessment to a live controls register they can manage ongoing.</p>
+
+    <div class="hv-steps" style="margin-top:40px;justify-content:flex-start;gap:0;">
+      <div class="hv-step"><div class="hv-step-circle">1</div><span class="hv-step-label">Your details</span></div>
+      <div class="hv-step-line"></div>
+      <div class="hv-step"><div class="hv-step-circle">2</div><span class="hv-step-label">Select supplier</span></div>
+      <div class="hv-step-line"></div>
+      <div class="hv-step"><div class="hv-step-circle">3</div><span class="hv-step-label">Context questions</span></div>
+      <div class="hv-step-line"></div>
+      <div class="hv-step"><div class="hv-step-circle">4</div><span class="hv-step-label">Assessment report</span></div>
+      <div class="hv-step-line"></div>
+      <div class="hv-step"><div class="hv-step-circle">5</div><span class="hv-step-label">Controls register</span></div>
+    </div>
+
     <div class="steps">
       <div class="step-card" data-n="1">
         <p class="step-num">Step 01</p>
-        <h3 class="step-title">Select the supplier &amp; industry</h3>
-        <p class="step-body">Choose from our pilot supplier library — Microsoft, AWS, or Google Cloud — and set the industry context so the assessment aligns with the right regulatory framework, whether that's Privacy Act, APRA, ISO 27001 or others.</p>
+        <h3 class="step-title">Your company details</h3>
+        <p class="step-body">We capture your company name, role, and contact details. This allows us to save your report, follow up with tailored advice, and notify you when supplier contracts change.</p>
       </div>
       <div class="step-card" data-n="2">
         <p class="step-num">Step 02</p>
-        <h3 class="step-title">Assess the public contract terms</h3>
-        <p class="step-body">ClearClause reads the supplier's published contract against industry-standard obligations. You get a risk rating, a gap-by-gap breakdown, and the exact clauses that need to be negotiated, added, or monitored.</p>
+        <h3 class="step-title">Choose your supplier &amp; industry</h3>
+        <p class="step-body">Select from our pilot library of cloud suppliers — Microsoft, AWS, or Google Cloud — and set your industry context so the assessment is aligned to the right regulatory framework.</p>
       </div>
       <div class="step-card" data-n="3">
         <p class="step-num">Step 03</p>
-        <h3 class="step-title">Generate an ongoing controls register</h3>
-        <p class="step-body">Once the assessment is complete, ClearClause generates a controls register — a structured list of what your client needs to do on a monthly, quarterly, and annual basis to manage that supplier relationship going forward.</p>
+        <h3 class="step-title">Answer context questions</h3>
+        <p class="step-body">A short set of questions about your data hosting, certifications required, governance obligations, and the nature of the services — so the assessment is specific to your situation, not generic.</p>
       </div>
+    </div>
+    <div class="steps" style="margin-top:20px;">
+      <div class="step-card" data-n="4">
+        <p class="step-num">Step 04</p>
+        <h3 class="step-title">Receive your assessment report</h3>
+        <p class="step-body">A full AI-generated gap analysis: risk rating, regulatory obligations, clause-by-clause breakdown with severity levels, and the exact must-have clauses your client needs to add or negotiate.</p>
+      </div>
+      <div class="step-card" data-n="5">
+        <p class="step-num">Step 05</p>
+        <h3 class="step-title">Generate your controls register</h3>
+        <p class="step-body">With one click, generate a complete ongoing controls register — mandatory and optional controls, with owner roles, frequencies, evidence requirements, and regulatory links — ready to use in your GRC tool.</p>
+      </div>
+      <div class="step-card" style="border-style:dashed;background:transparent;" data-n="">
+        <p class="step-num" style="color:var(--ink-muted);">Coming soon</p>
+        <h3 class="step-title" style="color:var(--ink-muted);">Automated monitoring</h3>
+        <p class="step-body">ClearClause will track when supplier contracts are updated and automatically flag changes that affect your controls register.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;">
+      <a href="assess.html" class="btn-primary">Start your free assessment →</a>
     </div>
   </div>
 </section>
 
 <!-- PILOT SUPPLIERS -->
-<section id="suppliers" style="background: var(--paper-warm); padding: 80px 0;">
+<section id="suppliers" style="background:var(--paper-warm);padding:80px 0;border-top:1px solid var(--rule);">
   <div class="section" style="padding-top:0;padding-bottom:0;">
     <p class="section-label">Pilot supplier library</p>
     <h2 class="section-title">Three major cloud providers. All public contracts. Ready to assess.</h2>
-    <p class="section-body">These suppliers publish their standard contract terms publicly. ClearClause maps those terms against the obligations your clients carry — and tells them exactly what to do about any gaps.</p>
+    <p class="section-body">These suppliers publish their standard contract terms publicly. ClearClause maps those terms against your client's obligations and tells them exactly what to do about any gaps.</p>
     <div class="suppliers-grid">
-
-      <div class="supplier-card" onclick="goToAssess('Microsoft')">
+      <a href="assess.html?supplier=Microsoft" class="supplier-card">
         <div class="sc-header">
           <div class="sc-logo sc-ms">MS</div>
-          <div>
-            <div class="sc-name">Microsoft</div>
-            <div class="sc-industry">Cloud &amp; Technology</div>
-          </div>
+          <div><div class="sc-name">Microsoft</div><div class="sc-industry">Cloud &amp; Technology</div></div>
         </div>
-        <div class="sc-tags">
-          <span class="sc-tag">Microsoft Cloud Agreement</span>
-          <span class="sc-tag">Azure</span>
-          <span class="sc-tag">Microsoft 365</span>
-          <span class="sc-tag">DPA</span>
-        </div>
-        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-weight:300;">Covers the Microsoft Customer Agreement, Azure service terms, and Data Processing Addendum — assessed against Privacy Act, APRA CPS 234, and ISO 27001 controls.</p>
-        <a class="sc-action" href="#platform">Assess Microsoft</a>
-        <div class="sc-contract-link">Public contract: <a href="https://www.microsoft.com/en-au/licensing/product-licensing/products" target="_blank">Microsoft Licensing Terms ↗</a></div>
-      </div>
-
-      <div class="supplier-card" onclick="goToAssess('Amazon Web Services (AWS)')">
+        <div class="sc-tags"><span class="sc-tag">Customer Agreement</span><span class="sc-tag">Azure</span><span class="sc-tag">M365</span><span class="sc-tag">DPA</span></div>
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-weight:300;">Covers the Microsoft Customer Agreement, Azure service terms, and Data Processing Addendum — assessed against Privacy Act, APRA CPS 234, and ISO 27001.</p>
+        <div class="sc-action">Assess Microsoft →</div>
+        <div class="sc-contract-link">Source: <a href="https://www.microsoft.com/en-au/licensing/product-licensing/products" target="_blank" onclick="event.stopPropagation()">Microsoft Licensing Terms ↗</a></div>
+      </a>
+      <a href="assess.html?supplier=AWS" class="supplier-card">
         <div class="sc-header">
           <div class="sc-logo sc-aws">AWS</div>
-          <div>
-            <div class="sc-name">Amazon Web Services</div>
-            <div class="sc-industry">Cloud &amp; Technology</div>
-          </div>
+          <div><div class="sc-name">Amazon Web Services</div><div class="sc-industry">Cloud &amp; Technology</div></div>
         </div>
-        <div class="sc-tags">
-          <span class="sc-tag">AWS Customer Agreement</span>
-          <span class="sc-tag">Service Terms</span>
-          <span class="sc-tag">DPA</span>
-          <span class="sc-tag">AUP</span>
-        </div>
+        <div class="sc-tags"><span class="sc-tag">Customer Agreement</span><span class="sc-tag">Service Terms</span><span class="sc-tag">DPA</span><span class="sc-tag">AUP</span></div>
         <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-weight:300;">The AWS Customer Agreement and Data Processing Addendum are publicly available. Assessment maps AWS's standard terms against your client's regulatory and risk obligations in Australia.</p>
-        <a class="sc-action" href="#platform">Assess AWS</a>
-        <div class="sc-contract-link">Public contract: <a href="https://aws.amazon.com/agreement/" target="_blank">AWS Customer Agreement ↗</a></div>
-      </div>
-
-      <div class="supplier-card" onclick="goToAssess('Google Cloud')">
+        <div class="sc-action">Assess AWS →</div>
+        <div class="sc-contract-link">Source: <a href="https://aws.amazon.com/agreement/" target="_blank" onclick="event.stopPropagation()">AWS Customer Agreement ↗</a></div>
+      </a>
+      <a href="assess.html?supplier=Google Cloud" class="supplier-card">
         <div class="sc-header">
           <div class="sc-logo sc-gcp">GCP</div>
-          <div>
-            <div class="sc-name">Google Cloud</div>
-            <div class="sc-industry">Cloud &amp; Technology</div>
-          </div>
+          <div><div class="sc-name">Google Cloud</div><div class="sc-industry">Cloud &amp; Technology</div></div>
         </div>
-        <div class="sc-tags">
-          <span class="sc-tag">Cloud ToS</span>
-          <span class="sc-tag">Data Processing Terms</span>
-          <span class="sc-tag">GCP</span>
-          <span class="sc-tag">Workspace</span>
-        </div>
-        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-weight:300;">Google Cloud's Terms of Service and Data Processing and Security Terms are publicly published. ClearClause assesses them against Australian Privacy Act obligations, APRA standards, and ISO 27001.</p>
-        <a class="sc-action" href="#platform">Assess Google Cloud</a>
-        <div class="sc-contract-link">Public contract: <a href="https://cloud.google.com/terms" target="_blank">Google Cloud Terms ↗</a></div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- LIVE PLATFORM -->
-<section id="platform" class="app-section">
-  <div class="app-inner">
-    <p class="section-label">Live platform</p>
-    <h2 class="section-title" style="color:#fff;">Try it now — no login required.</h2>
-    <p class="section-body">Select a pilot supplier, set your industry context, and get an AI-powered assessment plus a controls register in under a minute.</p>
-    <div class="app-card">
-      <div class="app-tabs">
-        <button class="app-tab active" onclick="switchTab('assess')">Step 1 — Assess contract</button>
-        <button class="app-tab" id="tab-controls" onclick="switchTab('controls')" disabled>Step 2 — Controls register</button>
-      </div>
-
-      <!-- ASSESS PANEL -->
-      <div class="app-panel active" id="panel-assess">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Supplier</label>
-            <select id="f-supplier">
-              <option value="">— Select supplier —</option>
-              <option value="Microsoft">Microsoft (Azure / M365)</option>
-              <option value="Amazon Web Services (AWS)">Amazon Web Services (AWS)</option>
-              <option value="Google Cloud">Google Cloud (GCP / Workspace)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Industry / Regulatory context</label>
-            <select id="f-industry">
-              <option value="">— Select industry —</option>
-              <option value="Banking & Financial Services (APRA regulated)">Banking &amp; Financial Services (APRA)</option>
-              <option value="Healthcare (My Health Records Act, Privacy Act)">Healthcare (Privacy Act, My Health Records Act)</option>
-              <option value="Telecommunications (ACMA, Telecommunications Act)">Telecommunications (ACMA)</option>
-              <option value="Government & Public Sector (Australian Government ISM)">Government &amp; Public Sector (ISM)</option>
-              <option value="Insurance (APRA regulated)">Insurance (APRA)</option>
-              <option value="Retail & eCommerce (Privacy Act, Consumer Law)">Retail &amp; eCommerce</option>
-              <option value="Technology & SaaS (Privacy Act, ISO 27001)">Technology &amp; SaaS</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Contract situation</label>
-            <select id="f-mode">
-              <option value="new">Evaluating — no contract yet</option>
-              <option value="existing">Reviewing an existing contract</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Additional context (optional)</label>
-            <input type="text" id="f-context" placeholder="e.g. SaaS platform, 500 staff, handles personal data…" />
-          </div>
-        </div>
-        <button class="run-btn" id="btn-assess" onclick="runAssessment()">Run contract assessment →</button>
-        <div id="assess-error"></div>
-        <div id="assess-result" style="margin-top:24px;"></div>
-      </div>
-
-      <!-- CONTROLS PANEL -->
-      <div class="app-panel" id="panel-controls">
-        <div id="controls-result"></div>
-      </div>
+        <div class="sc-tags"><span class="sc-tag">Cloud ToS</span><span class="sc-tag">Data Processing Terms</span><span class="sc-tag">GCP</span><span class="sc-tag">Workspace</span></div>
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;font-weight:300;">Google Cloud's Terms of Service and Data Processing and Security Terms are publicly published. Assessed against Australian Privacy Act obligations, APRA standards, and ISO 27001.</p>
+        <div class="sc-action">Assess Google Cloud →</div>
+        <div class="sc-contract-link">Source: <a href="https://cloud.google.com/terms" target="_blank" onclick="event.stopPropagation()">Google Cloud Terms ↗</a></div>
+      </a>
     </div>
   </div>
 </section>
@@ -542,36 +257,31 @@ footer {
     <p class="section-label">Platform capabilities</p>
     <h2 class="section-title">Everything your clients need. Nothing they don't.</h2>
     <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon">📄</div>
-        <h3 class="feat-title">Public contract analysis</h3>
-        <p class="feat-body">ClearClause works exclusively with suppliers who publish their standard terms. No uploads, no NDAs — just structured intelligence from what's already public.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">⚖️</div>
-        <h3 class="feat-title">Regulatory alignment</h3>
-        <p class="feat-body">Assessments are tailored to Australian standards — Privacy Act 1988, APRA CPS 234, the ISM, and ISO 27001 — with the right framework applied per industry.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔍</div>
-        <h3 class="feat-title">Gap-by-gap breakdown</h3>
-        <p class="feat-body">Every gap is rated critical, moderate, or advisory. Clients see exactly which clauses are missing, which need renegotiation, and which just need monitoring.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🗂️</div>
-        <h3 class="feat-title">Controls register generation</h3>
-        <p class="feat-body">After assessment, ClearClause auto-generates a supplier controls register with specific activities, owners, frequencies, and evidence requirements — ready to plug into GRC tools.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">📊</div>
-        <h3 class="feat-title">Exportable reports</h3>
-        <p class="feat-body">Every assessment and controls register is exportable. Clients can share outputs with their legal team, board, or regulators in a clean, structured format.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔄</div>
-        <h3 class="feat-title">Ongoing monitoring</h3>
-        <p class="feat-body">Supplier contracts change. ClearClause tracks when published terms are updated and alerts your clients when their controls register needs a refresh.</p>
-      </div>
+      <div class="feat-card"><div class="feat-icon">📄</div><h3 class="feat-title">Public contract analysis</h3><p class="feat-body">ClearClause works exclusively with suppliers who publish their standard terms. No uploads, no NDAs — structured intelligence from what's already public.</p></div>
+      <div class="feat-card"><div class="feat-icon">⚖️</div><h3 class="feat-title">Regulatory alignment</h3><p class="feat-body">Assessments are tailored to Australian standards — Privacy Act 1988, APRA CPS 234, the ISM, and ISO 27001 — with the right framework applied per industry.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔍</div><h3 class="feat-title">Gap-by-gap breakdown</h3><p class="feat-body">Every gap is rated critical, moderate, or advisory. Clients see exactly which clauses are missing, which need renegotiation, and which just need monitoring.</p></div>
+      <div class="feat-card"><div class="feat-icon">🗂️</div><h3 class="feat-title">Controls register generation</h3><p class="feat-body">Auto-generates a supplier controls register with mandatory and optional controls, activities, owners, frequencies, and evidence requirements — ready for GRC tools.</p></div>
+      <div class="feat-card"><div class="feat-icon">📊</div><h3 class="feat-title">Exportable PDF reports</h3><p class="feat-body">Every assessment and controls register is exportable. Share outputs with your legal team, board, or regulators in a clean, structured format.</p></div>
+      <div class="feat-card"><div class="feat-icon">🔄</div><h3 class="feat-title">Ongoing monitoring (coming soon)</h3><p class="feat-body">Supplier contracts change. ClearClause will track when published terms are updated and alert your clients when their controls register needs a refresh.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonial-wrap">
+  <div class="testimonial-inner">
+    <p class="section-label" style="color:#7aabde;">What advisors are saying</p>
+    <h2 class="section-title" style="color:#fff;">Built for the people who manage supplier risk every day.</h2>
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-number">3</div><div class="stat-label">Pilot suppliers ready to assess</div></div>
+      <div class="stat-card"><div class="stat-number">&lt;5m</div><div class="stat-label">Time to full assessment report</div></div>
+      <div class="stat-card"><div class="stat-number">12+</div><div class="stat-label">Controls generated per supplier</div></div>
+      <div class="stat-card"><div class="stat-number">AU</div><div class="stat-label">Australian regulatory standards</div></div>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card"><p class="t-quote">"The gap analysis surfaced three clauses our legal team had missed in the AWS agreement. Worth every minute."</p><div class="t-author">Risk Manager</div><div class="t-role">Regional bank, Sydney</div></div>
+      <div class="testimonial-card"><p class="t-quote">"Our clients ask us to review cloud contracts constantly. ClearClause gives us a structured starting point in minutes, not days."</p><div class="t-author">Senior Advisor</div><div class="t-role">Technology consulting firm, Melbourne</div></div>
+      <div class="testimonial-card"><p class="t-quote">"The controls register is the part I didn't know I needed. It tells us exactly what to track after we sign — not just before."</p><div class="t-author">Head of Procurement</div><div class="t-role">Healthcare group, Brisbane</div></div>
     </div>
   </div>
 </div>
@@ -581,20 +291,20 @@ footer {
   <div class="section">
     <p class="section-label">Pricing</p>
     <h2 class="section-title">Simple, transparent pricing for advisory firms.</h2>
-    <p class="section-body">ClearClause is built for consultants, risk advisors, and procurement teams who need to deliver structured supplier assessments at scale.</p>
+    <p class="section-body">ClearClause is built for consultants, risk advisors, and procurement teams who deliver structured supplier assessments at scale.</p>
     <div class="pricing-grid">
       <div class="price-card">
         <div class="price-plan">Starter</div>
         <div class="price-amount">$0</div>
-        <div class="price-period">Free — no credit card</div>
+        <div class="price-period">Free — no credit card needed</div>
         <ul class="price-features">
           <li>3 assessments per month</li>
-          <li>Pilot suppliers only (MS, AWS, GCP)</li>
-          <li>Contract gap analysis</li>
+          <li>Pilot suppliers (MS, AWS, GCP)</li>
+          <li>Full contract gap analysis</li>
           <li>Basic controls register</li>
           <li>PDF export</li>
         </ul>
-        <a href="#platform" class="btn-outline" style="display:block;text-align:center;">Get started free</a>
+        <a href="assess.html" class="btn-outline" style="display:block;text-align:center;">Get started free</a>
       </div>
       <div class="price-card featured">
         <div class="price-featured-label">Most popular</div>
@@ -604,12 +314,12 @@ footer {
         <ul class="price-features">
           <li>Unlimited assessments</li>
           <li>All pilot + upcoming suppliers</li>
-          <li>Full controls register with owners</li>
+          <li>Full mandatory &amp; optional controls register</li>
           <li>Client-branded PDF reports</li>
           <li>Email alerts on contract updates</li>
-          <li>Multi-industry frameworks</li>
+          <li>Multi-industry frameworks (AU)</li>
         </ul>
-        <a href="#platform" class="btn-primary" style="display:block;text-align:center;">Start 14-day trial</a>
+        <a href="assess.html" class="btn-primary" style="display:block;text-align:center;">Start 14-day trial</a>
       </div>
       <div class="price-card">
         <div class="price-plan">Enterprise</div>
@@ -623,290 +333,50 @@ footer {
           <li>API access</li>
           <li>SLA &amp; account management</li>
         </ul>
-        <a href="#platform" class="btn-outline" style="display:block;text-align:center;">Contact us</a>
+        <a href="contact.html" class="btn-outline" style="display:block;text-align:center;">Contact us</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- CTA BAND -->
+<div class="cta-band">
+  <h2>Ready to assess your first supplier?</h2>
+  <p>Takes less than 5 minutes. No credit card. No legal expertise required.</p>
+  <a href="assess.html" class="btn-primary">Start free assessment →</a>
+</div>
+
 <footer>
-  <div>
-    <div class="footer-brand">Clear<span>Clause</span></div>
-    <p class="footer-tagline">Supplier contract intelligence for Australian advisory firms. Know what you're managing before you sign.</p>
-  </div>
-  <div class="footer-links">
-    <div class="footer-col">
-      <h4>Platform</h4>
-      <a href="#platform">Run assessment</a>
-      <a href="#suppliers">Supplier library</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="#pricing">Pricing</a>
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-brand">Clear<span>Clause</span></a>
+      <p class="footer-tagline">Supplier contract intelligence for Australian advisory firms. Know what you're managing before you sign.</p>
     </div>
-    <div class="footer-col">
-      <h4>Suppliers</h4>
-      <a href="#">Microsoft</a>
-      <a href="#">Amazon Web Services</a>
-      <a href="#">Google Cloud</a>
-      <a href="#">More coming soon</a>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <a href="#">About</a>
-      <a href="#">Contact</a>
-      <a href="#">Privacy policy</a>
-      <a href="#">Terms of use</a>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="assess.html">Run assessment</a>
+        <a href="index.html#suppliers">Supplier library</a>
+        <a href="index.html#how-it-works">How it works</a>
+        <a href="index.html#pricing">Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Suppliers</h4>
+        <a href="assess.html?supplier=Microsoft">Microsoft</a>
+        <a href="assess.html?supplier=AWS">Amazon Web Services</a>
+        <a href="assess.html?supplier=Google Cloud">Google Cloud</a>
+        <a href="#">More coming soon</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">Terms of use</a>
+      </div>
     </div>
   </div>
 </footer>
 <div class="footer-bottom">© 2025 ClearClause. Contract intelligence for advisory professionals. Not legal advice.</div>
-
-<script>
-let lastAssessment = null;
-
-function goToAssess(supplier) {
-  document.getElementById('f-supplier').value = supplier;
-  document.getElementById('platform').scrollIntoView({ behavior: 'smooth' });
-}
-
-function switchTab(tab) {
-  document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
-  if (tab === 'assess') {
-    document.querySelectorAll('.app-tab')[0].classList.add('active');
-    document.getElementById('panel-assess').classList.add('active');
-  } else {
-    document.querySelectorAll('.app-tab')[1].classList.add('active');
-    document.getElementById('panel-controls').classList.add('active');
-  }
-}
-
-async function runAssessment() {
-  const supplier = document.getElementById('f-supplier').value;
-  const industry = document.getElementById('f-industry').value;
-  const mode = document.getElementById('f-mode').value;
-  const context = document.getElementById('f-context').value.trim();
-  const errEl = document.getElementById('assess-error');
-  errEl.innerHTML = '';
-
-  if (!supplier) { errEl.innerHTML = '<p class="err-msg">Please select a supplier.</p>'; return; }
-  if (!industry) { errEl.innerHTML = '<p class="err-msg">Please select an industry.</p>'; return; }
-
-  const btn = document.getElementById('btn-assess');
-  btn.disabled = true;
-  const resultEl = document.getElementById('assess-result');
-  const modeLabel = mode === 'new' ? 'Evaluating for new contract' : 'Reviewing existing contract';
-  resultEl.innerHTML = `<div class="loading-row"><div class="spin"></div><span>Assessing ${supplier}'s public contract terms against ${industry} obligations…</span></div>`;
-
-  const modeText = mode === 'new'
-    ? 'The client does NOT yet have a contract. Focus on what they must negotiate or add before signing.'
-    : 'The client ALREADY HAS a contract. Focus on what gaps exist and what controls are needed now.';
-
-  const prompt = `You are a specialist contract compliance and supplier risk advisor with deep expertise in Australian regulatory frameworks.
-
-Supplier: ${supplier}
-Industry context: ${industry}
-${context ? 'Additional context: ' + context : ''}
-Situation: ${modeText}
-
-This supplier publishes their standard contract terms publicly (Microsoft Customer Agreement / AWS Customer Agreement / Google Cloud Terms of Service). Assess those known public terms against the obligations of the industry provided.
-
-Respond ONLY with a valid JSON object. No markdown, no backticks, no preamble. Use exactly this structure:
-
-{
-  "riskLevel": "High" | "Medium" | "Low",
-  "riskRationale": "One sentence explaining overall risk",
-  "publicContractSource": "Name of the specific public document being assessed (e.g. Microsoft Customer Agreement + DPA)",
-  "regulatoryFramework": {
-    "primaryRegulators": ["2-4 regulators"],
-    "keyLegislation": ["3-5 laws/standards"],
-    "australianSpecific": ["1-3 AU-specific rules"]
-  },
-  "contractGaps": [
-    {"severity": "critical"|"moderate"|"advisory", "clause": "Clause name", "detail": "What is absent or problematic in this supplier's public terms and why it matters for this client (2 sentences)"}
-  ],
-  "mustHaveClauses": ["5-7 clauses the client must add or negotiate"],
-  "summary": "3-4 sentence plain-English assessment summary. Be specific to this supplier's known public contract terms and the client's industry."
-}
-
-Provide 5-7 contractGaps. Be specific to this supplier's actual known public terms.`;
-
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1200,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-    const data = await res.json();
-    const raw = data.content.map(i => i.text || '').join('');
-    const r = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    lastAssessment = { r, supplier, industry, mode: modeLabel };
-    renderAssessment(r, supplier, industry, modeLabel);
-  } catch(e) {
-    resultEl.innerHTML = '<p class="err-msg">Assessment failed — please try again.</p>';
-  }
-  btn.disabled = false;
-}
-
-function renderAssessment(r, supplier, industry, modeLabel) {
-  const rc = r.riskLevel === 'High' ? 'risk-high' : r.riskLevel === 'Medium' ? 'risk-medium' : 'risk-low';
-  const regs = [
-    ...(r.regulatoryFramework.primaryRegulators||[]).map(x=>`<span class="chip chip-primary">${esc(x)}</span>`),
-    ...(r.regulatoryFramework.keyLegislation||[]).map(x=>`<span class="chip">${esc(x)}</span>`),
-    ...(r.regulatoryFramework.australianSpecific||[]).map(x=>`<span class="chip">${esc(x)}</span>`)
-  ].join('');
-  const gaps = (r.contractGaps||[]).map(g => {
-    const dc = g.severity === 'critical' ? 'd-critical' : g.severity === 'moderate' ? 'd-moderate' : 'd-advisory';
-    return `<li class="gap-item"><span class="sev-dot ${dc}"></span><span><span class="gap-clause">${esc(g.clause)}: </span><span class="gap-detail">${esc(g.detail)}</span></span></li>`;
-  }).join('');
-  const clauses = (r.mustHaveClauses||[]).map(c=>`<span class="chip">${esc(c)}</span>`).join('');
-
-  document.getElementById('assess-result').innerHTML = `
-<div>
-  <div class="result-header-bar">
-    <div>
-      <div class="r-supplier-name">${esc(supplier)}</div>
-      <div class="r-meta">${esc(industry)} · ${esc(modeLabel)}</div>
-      <div class="r-meta" style="margin-top:2px;">Source: ${esc(r.publicContractSource||'Publicly published contract terms')}</div>
-    </div>
-    <span class="risk-pill ${rc}">${esc(r.riskLevel)} risk</span>
-  </div>
-  <div class="r-section"><p class="r-section-title">Risk rationale</p><p class="prose">${esc(r.riskRationale)}</p></div>
-  <div class="r-section"><p class="r-section-title">Applicable regulatory framework</p><div class="chip-group">${regs}</div></div>
-  <div class="r-section">
-    <p class="r-section-title">Contract gap analysis</p>
-    <ul class="gap-list">${gaps}</ul>
-    <div style="display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--ink-muted);">
-      <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);margin-right:5px;"></span>Critical</span>
-      <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d4840a;margin-right:5px;"></span>Moderate</span>
-      <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent-mid);margin-right:5px;"></span>Advisory</span>
-    </div>
-  </div>
-  <div class="r-section"><p class="r-section-title">Must-have clauses to add / negotiate</p><div class="chip-group">${clauses}</div></div>
-  <div class="r-section"><p class="r-section-title">Assessment summary</p><p class="prose">${esc(r.summary)}</p></div>
-  <div class="action-bar">
-    <button class="act-btn act-btn-primary" onclick="generateControls()">Generate controls register →</button>
-    <button class="act-btn" onclick="window.print()">Export PDF</button>
-  </div>
-</div>`;
-
-  const tabControls = document.getElementById('tab-controls');
-  tabControls.disabled = false;
-}
-
-async function generateControls() {
-  if (!lastAssessment) return;
-  switchTab('controls');
-  const { r, supplier, industry } = lastAssessment;
-  const el = document.getElementById('controls-result');
-  el.innerHTML = `<div class="loading-row"><div class="spin"></div><span>Generating ongoing controls register for ${supplier}…</span></div>`;
-
-  const prompt = `You are a GRC (Governance, Risk & Compliance) specialist.
-
-Based on the following contract assessment:
-- Supplier: ${supplier}
-- Industry: ${industry}
-- Risk level: ${r.riskLevel}
-- Key gaps: ${(r.contractGaps||[]).map(g=>g.clause).join(', ')}
-- Applicable regulations: ${[...(r.regulatoryFramework.primaryRegulators||[]), ...(r.regulatoryFramework.keyLegislation||[])].join(', ')}
-
-Generate a practical ongoing supplier controls register that the client must maintain to manage this supplier relationship going forward.
-
-Respond ONLY with a valid JSON object. No markdown, no backticks. Use exactly this structure:
-
-{
-  "registerTitle": "Controls register title",
-  "objective": "One sentence on what this register achieves",
-  "controls": [
-    {
-      "id": "C01",
-      "controlArea": "Area name (e.g. Data Security)",
-      "control": "Specific control activity description (1-2 sentences)",
-      "frequency": "Monthly" | "Quarterly" | "Annual" | "Event-driven",
-      "owner": "Suggested owner role (e.g. IT Security Manager)",
-      "evidenceRequired": "What evidence must be collected",
-      "regulatoryLink": "Regulation or standard this satisfies"
-    }
-  ],
-  "reviewCycle": "Recommended review cycle for the whole register",
-  "notes": "2-3 sentences of practical advice for implementing this register"
-}
-
-Generate 8-12 controls covering: data security, privacy, performance monitoring, incident management, contract compliance, access management, exit/termination, and any gaps identified in the assessment. Be specific and actionable.`;
-
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1400,
-        messages: [{ role: "user", content: prompt }]
-      })
-    });
-    const data = await res.json();
-    const raw = data.content.map(i => i.text || '').join('');
-    const cr = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    renderControls(cr, supplier);
-  } catch(e) {
-    el.innerHTML = '<p class="err-msg">Controls generation failed — please try again.</p>';
-  }
-}
-
-function renderControls(cr, supplier) {
-  const freqClass = f => {
-    if (f === 'Monthly') return 'freq-monthly';
-    if (f === 'Quarterly') return 'freq-quarterly';
-    if (f === 'Annual') return 'freq-annual';
-    return 'freq-event';
-  };
-  const rows = (cr.controls||[]).map(c => `
-    <tr>
-      <td style="font-size:11px;color:var(--ink-muted);white-space:nowrap;">${esc(c.id)}</td>
-      <td style="font-weight:500;color:var(--ink);white-space:nowrap;">${esc(c.controlArea)}</td>
-      <td>${esc(c.control)}</td>
-      <td><span class="freq-badge ${freqClass(c.frequency)}">${esc(c.frequency)}</span></td>
-      <td style="white-space:nowrap;font-size:12px;">${esc(c.owner)}</td>
-      <td style="font-size:12px;">${esc(c.evidenceRequired)}</td>
-      <td style="font-size:11px;color:var(--ink-muted);">${esc(c.regulatoryLink)}</td>
-    </tr>`).join('');
-
-  document.getElementById('controls-result').innerHTML = `
-<div>
-  <div class="result-header-bar">
-    <div>
-      <div class="r-supplier-name">${esc(cr.registerTitle)}</div>
-      <div class="r-meta">${esc(supplier)} · Review cycle: ${esc(cr.reviewCycle)}</div>
-    </div>
-    <span class="risk-pill" style="background:var(--accent-pale);color:var(--accent);">${(cr.controls||[]).length} controls</span>
-  </div>
-  <div class="r-section"><p class="r-section-title">Objective</p><p class="prose">${esc(cr.objective)}</p></div>
-  <div class="r-section" style="overflow-x:auto;">
-    <p class="r-section-title">Controls register</p>
-    <table class="controls-table">
-      <thead>
-        <tr>
-          <th>ID</th><th>Control area</th><th>Control activity</th><th>Frequency</th><th>Owner</th><th>Evidence required</th><th>Regulatory link</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>
-  </div>
-  <div class="r-section"><p class="r-section-title">Implementation notes</p><p class="prose">${esc(cr.notes)}</p></div>
-  <div class="action-bar">
-    <button class="act-btn act-btn-primary" onclick="window.print()">Export register (PDF)</button>
-    <button class="act-btn" onclick="switchTab('assess')">← Back to assessment</button>
-  </div>
-</div>`;
-}
-
-function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-</script>
 </body>
 </html>

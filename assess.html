@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Run Assessment — ClearClause</title>
+<meta name="description" content="Start your supplier contract assessment. Identify gaps, regulatory obligations, and generate an ongoing controls register."/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+<style>
+.assess-layout{display:grid;grid-template-columns:280px 1fr;gap:0;min-height:calc(100vh - 62px);}
+.sidebar{background:var(--ink);padding:36px 28px;position:sticky;top:62px;height:calc(100vh - 62px);overflow-y:auto;}
+.sidebar-title{font-family:var(--serif);font-size:18px;color:#fff;margin-bottom:6px;}
+.sidebar-sub{font-size:13px;color:#6b7585;margin-bottom:32px;line-height:1.55;font-weight:300;}
+.sidebar-steps{list-style:none;}
+.sidebar-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid #1e2635;}
+.sidebar-step:last-child{border-bottom:none;}
+.ss-circle{width:24px;height:24px;border-radius:50%;border:1.5px solid #2a3344;display:flex;align-items:center;justify-content:center;font-size:11px;color:#4a5568;flex-shrink:0;margin-top:1px;transition:all 0.2s;}
+.ss-circle.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ss-circle.done{background:#1a7a4a;border-color:#1a7a4a;color:#fff;}
+.ss-label{font-size:13px;color:#6b7585;transition:color 0.2s;}
+.ss-label.active{color:#d8e4f0;font-weight:500;}
+.ss-label.done{color:#4a7a5a;}
+.ss-desc{font-size:11px;color:#3a4454;margin-top:2px;}
+.main-content{padding:40px 48px;max-width:780px;}
+.step-header{margin-bottom:32px;}
+.step-tag{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:8px;}
+.step-title{font-family:var(--serif);font-size:28px;color:var(--ink);margin-bottom:8px;}
+.step-desc{font-size:15px;color:var(--ink-soft);line-height:1.65;font-weight:300;}
+.step-panel{display:none;}
+.step-panel.active{display:block;}
+.nav-btns{display:flex;gap:10px;margin-top:32px;padding-top:24px;border-top:1px solid var(--rule);}
+.nav-btn-back{background:transparent;color:var(--ink-soft);padding:10px 22px;border-radius:var(--r);font-family:var(--sans);font-size:14px;border:1px solid var(--rule);cursor:pointer;transition:all 0.15s;}
+.nav-btn-back:hover{border-color:var(--ink-muted);}
+.nav-btn-next{background:var(--accent);color:#fff;padding:10px 24px;border-radius:var(--r);font-family:var(--sans);font-size:14px;font-weight:500;border:none;cursor:pointer;transition:background 0.15s;}
+.nav-btn-next:hover{background:var(--accent-mid);}
+.nav-btn-next:disabled{opacity:0.4;cursor:not-allowed;}
+.radio-group{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+.radio-option{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border:1px solid var(--rule);border-radius:var(--r);cursor:pointer;transition:border-color 0.15s,background 0.15s;background:#fff;}
+.radio-option:hover{border-color:var(--accent-mid);}
+.radio-option.selected{border-color:var(--accent);background:var(--accent-pale);}
+.radio-option input[type=radio]{margin-top:2px;accent-color:var(--accent);flex-shrink:0;}
+.radio-label{font-size:14px;font-weight:500;color:var(--ink);}
+.radio-desc{font-size:12px;color:var(--ink-muted);margin-top:2px;line-height:1.5;}
+.checkbox-group{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
+.checkbox-option{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--rule);border-radius:var(--r);cursor:pointer;background:#fff;transition:border-color 0.15s;}
+.checkbox-option:hover{border-color:var(--accent-mid);}
+.checkbox-option.selected{border-color:var(--accent);background:var(--accent-pale);}
+.checkbox-option input[type=checkbox]{accent-color:var(--accent);}
+.checkbox-label{font-size:14px;color:var(--ink);}
+.q-section{margin-bottom:28px;}
+.q-section-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--rule);}
+.supplier-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px;}
+.supplier-sel-card{border:2px solid var(--rule);border-radius:var(--r-lg);padding:18px;cursor:pointer;background:#fff;transition:all 0.15s;text-align:center;}
+.supplier-sel-card:hover{border-color:var(--accent-mid);}
+.supplier-sel-card.selected{border-color:var(--accent);background:var(--accent-pale);}
+.ss-logo{width:48px;height:48px;border-radius:8px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;border:1px solid var(--rule);}
+.ss-ms{background:#fff3e0;color:#c55a00;}
+.ss-aws{background:#fff8e0;color:#8a6000;}
+.ss-gcp{background:#e8f0fe;color:#1a47a3;}
+.ss-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+.ss-sub{font-size:11px;color:var(--ink-muted);}
+.progress-bar{height:3px;background:var(--rule);border-radius:2px;margin-bottom:32px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 0.4s ease;}
+.result-wrapper{background:#fff;border:1px solid var(--rule);border-radius:var(--r-lg);overflow:hidden;}
+.result-top{padding:24px 28px;border-bottom:1px solid var(--rule);display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.result-supplier-name{font-size:20px;font-weight:500;color:var(--ink);}
+.result-meta{font-size:12px;color:var(--ink-muted);margin-top:3px;}
+.result-body{padding:24px 28px;}
+.result-footer{padding:16px 28px;border-top:1px solid var(--rule);background:var(--paper);}
+.controls-wrapper{margin-top:24px;}
+.controls-type-toggle{display:flex;gap:10px;margin-bottom:20px;}
+.ct-btn{padding:8px 18px;font-size:13px;font-family:var(--sans);border:1px solid var(--rule);border-radius:var(--r);background:transparent;color:var(--ink-soft);cursor:pointer;transition:all 0.15s;}
+.ct-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.mandatory-note{font-size:13px;color:var(--ok);background:var(--ok-pale);padding:10px 14px;border-radius:var(--r);margin-bottom:16px;}
+.optional-note{font-size:13px;color:var(--amber);background:var(--amber-pale);padding:10px 14px;border-radius:var(--r);margin-bottom:16px;}
+@media(max-width:900px){
+  .assess-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .main-content{padding:24px 20px;}
+  .supplier-cards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Clear<span>Clause</span></a>
+  <div class="nav-links">
+    <a href="index.html#how-it-works">How it works</a>
+    <a href="index.html#suppliers">Suppliers</a>
+    <a href="about.html">About</a>
+    <a href="index.html#pricing">Pricing</a>
+    <a href="contact.html">Contact</a>
+    <a href="assess.html" class="nav-cta active">Start free assessment</a>
+  </div>
+</nav>
+
+<div class="assess-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-title">Contract Assessment</div>
+    <div class="sidebar-sub">Five steps to a complete gap analysis and controls register.</div>
+    <ul class="sidebar-steps" id="sidebar-steps">
+      <li class="sidebar-step"><div class="ss-circle active" id="sc-1">1</div><div><div class="ss-label active" id="sl-1">Your details</div><div class="ss-desc">Company &amp; contact info</div></div></li>
+      <li class="sidebar-step"><div class="ss-circle" id="sc-2">2</div><div><div class="ss-label" id="sl-2">Select supplier</div><div class="ss-desc">Supplier &amp; industry</div></div></li>
+      <li class="sidebar-step"><div class="ss-circle" id="sc-3">3</div><div><div class="ss-label" id="sl-3">Context questions</div><div class="ss-desc">Data, governance &amp; certs</div></div></li>
+      <li class="sidebar-step"><div class="ss-circle" id="sc-4">4</div><div><div class="ss-label" id="sl-4">Assessment report</div><div class="ss-desc">Gap analysis &amp; risk rating</div></div></li>
+      <li class="sidebar-step"><div class="ss-circle" id="sc-5">5</div><div><div class="ss-label" id="sl-5">Controls register</div><div class="ss-desc">Mandatory &amp; optional controls</div></div></li>
+    </ul>
+    <div style="margin-top:40px;padding-top:24px;border-top:1px solid #1e2635;">
+      <div style="font-size:12px;color:#3a4454;line-height:1.6;">All assessments are based on publicly available supplier contract terms. Not legal advice.</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:20%;"></div></div>
+
+    <!-- STEP 1: DETAILS -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-header">
+        <div class="step-tag">Step 1 of 5</div>
+        <h1 class="step-title">Your company details</h1>
+        <p class="step-desc">We use this to personalise your report and keep you informed when supplier contracts change. We'll never share your details with third parties.</p>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>First name *</label><input type="text" id="d-fname" placeholder="e.g. Sarah"/></div>
+        <div class="form-group"><label>Last name *</label><input type="text" id="d-lname" placeholder="e.g. Mitchell"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Work email *</label><input type="email" id="d-email" placeholder="e.g. sarah@firm.com.au"/></div>
+        <div class="form-group"><label>Phone (optional)</label><input type="tel" id="d-phone" placeholder="e.g. 0400 000 000"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Company name *</label><input type="text" id="d-company" placeholder="e.g. Mitchell Risk Advisory"/></div>
+        <div class="form-group"><label>Your role *</label><input type="text" id="d-role" placeholder="e.g. Risk Manager, CTO, Procurement Lead"/></div>
+      </div>
+      <div class="form-group"><label>How did you hear about ClearClause?</label>
+        <select id="d-source">
+          <option value="">— Select —</option>
+          <option>LinkedIn</option>
+          <option>Google search</option>
+          <option>Colleague referral</option>
+          <option>Industry event</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div id="step1-err"></div>
+      <div class="nav-btns"><button class="nav-btn-next" onclick="nextStep(1)">Continue →</button></div>
+    </div>
+
+    <!-- STEP 2: SUPPLIER -->
+    <div class="step-panel" id="step-2">
+      <div class="step-header">
+        <div class="step-tag">Step 2 of 5</div>
+        <h1 class="step-title">Choose your supplier &amp; industry</h1>
+        <p class="step-desc">Select the supplier you want to assess and your industry so we apply the right regulatory framework.</p>
+      </div>
+      <div class="q-section">
+        <div class="q-section-title">Which supplier are you assessing?</div>
+        <div class="supplier-cards">
+          <div class="supplier-sel-card" onclick="selectSupplier('Microsoft')" id="sc-Microsoft">
+            <div class="ss-logo ss-ms">MS</div>
+            <div class="ss-name">Microsoft</div>
+            <div class="ss-sub">Azure · M365 · Customer Agreement</div>
+          </div>
+          <div class="supplier-sel-card" onclick="selectSupplier('Amazon Web Services (AWS)')" id="sc-Amazon Web Services (AWS)">
+            <div class="ss-logo ss-aws">AWS</div>
+            <div class="ss-name">Amazon Web Services</div>
+            <div class="ss-sub">AWS Customer Agreement · DPA</div>
+          </div>
+          <div class="supplier-sel-card" onclick="selectSupplier('Google Cloud')" id="sc-Google Cloud">
+            <div class="ss-logo ss-gcp">GCP</div>
+            <div class="ss-name">Google Cloud</div>
+            <div class="ss-sub">Cloud ToS · Data Processing Terms</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row" style="margin-top:24px;">
+        <div class="form-group">
+          <label>Your industry *</label>
+          <select id="s-industry">
+            <option value="">— Select industry —</option>
+            <option>Banking &amp; Financial Services (APRA regulated)</option>
+            <option>Healthcare (Privacy Act, My Health Records Act)</option>
+            <option>Telecommunications (ACMA, Telecommunications Act)</option>
+            <option>Government &amp; Public Sector (Australian Government ISM)</option>
+            <option>Insurance (APRA regulated)</option>
+            <option>Retail &amp; eCommerce (Privacy Act, Consumer Law)</option>
+            <option>Technology &amp; SaaS (Privacy Act, ISO 27001)</option>
+            <option>Legal &amp; Professional Services</option>
+            <option>Education (TEQSA, FERPA)</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Contract situation *</label>
+          <select id="s-mode">
+            <option value="new">Evaluating — no contract signed yet</option>
+            <option value="existing">Reviewing an existing contract</option>
+          </select>
+        </div>
+      </div>
+      <div id="step2-err"></div>
+      <div class="nav-btns">
+        <button class="nav-btn-back" onclick="prevStep(2)">← Back</button>
+        <button class="nav-btn-next" onclick="nextStep(2)">Continue →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: CONTEXT QUESTIONS -->
+    <div class="step-panel" id="step-3">
+      <div class="step-header">
+        <div class="step-tag">Step 3 of 5</div>
+        <h1 class="step-title">Context &amp; governance questions</h1>
+        <p class="step-desc">These questions help us tailor the assessment to your specific situation — your data, your certifications, and your obligations. Select all that apply.</p>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-title">Nature of services &amp; data</div>
+        <div class="checkbox-group" id="cq-data">
+          <label class="checkbox-option"><input type="checkbox" value="personal_data" onchange="toggleCheck(this)"/> <span class="checkbox-label">This supplier will process, store or access personal data of our customers or staff</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="sensitive_data" onchange="toggleCheck(this)"/> <span class="checkbox-label">Sensitive data is involved (health records, financial data, government IDs)</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="offshore_processing" onchange="toggleCheck(this)"/> <span class="checkbox-label">Data may be processed or stored offshore (outside Australia)</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="critical_infrastructure" onchange="toggleCheck(this)"/> <span class="checkbox-label">This is a critical infrastructure or mission-critical service</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="saas_platform" onchange="toggleCheck(this)"/> <span class="checkbox-label">This is a SaaS platform used by our customers or end-users</span></label>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-title">Certification &amp; compliance requirements</div>
+        <div class="checkbox-group" id="cq-certs">
+          <label class="checkbox-option"><input type="checkbox" value="iso27001" onchange="toggleCheck(this)"/> <span class="checkbox-label">ISO 27001 certification required from supplier</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="soc2" onchange="toggleCheck(this)"/> <span class="checkbox-label">SOC 2 Type II report required</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="irap" onchange="toggleCheck(this)"/> <span class="checkbox-label">IRAP assessment required (Australian Government)</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="pci_dss" onchange="toggleCheck(this)"/> <span class="checkbox-label">PCI-DSS compliance required (card payment data)</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="apra_cps234" onchange="toggleCheck(this)"/> <span class="checkbox-label">APRA CPS 234 obligations apply (financial services)</span></label>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <div class="q-section-title">Governance &amp; contractual requirements</div>
+        <div class="checkbox-group" id="cq-gov">
+          <label class="checkbox-option"><input type="checkbox" value="audit_rights" onchange="toggleCheck(this)"/> <span class="checkbox-label">We require audit rights or the right to inspect the supplier's controls</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="sla_required" onchange="toggleCheck(this)"/> <span class="checkbox-label">Minimum SLA / uptime commitments are required</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="incident_notification" onchange="toggleCheck(this)"/> <span class="checkbox-label">Mandatory breach/incident notification within defined timeframes</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="exit_provisions" onchange="toggleCheck(this)"/> <span class="checkbox-label">Exit provisions / data return and deletion on termination required</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="sub_processors" onchange="toggleCheck(this)"/> <span class="checkbox-label">We need visibility and control over sub-processors / fourth parties</span></label>
+          <label class="checkbox-option"><input type="checkbox" value="liability_cap" onchange="toggleCheck(this)"/> <span class="checkbox-label">Liability cap in supplier's standard terms is a concern</span></label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Any other context we should know? (optional)</label>
+        <textarea id="cq-other" placeholder="e.g. We are a regulated entity, currently in procurement for a 3-year managed services agreement…"></textarea>
+      </div>
+
+      <div class="nav-btns">
+        <button class="nav-btn-back" onclick="prevStep(3)">← Back</button>
+        <button class="nav-btn-next" onclick="runAssessment()">Run assessment →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: ASSESSMENT REPORT -->
+    <div class="step-panel" id="step-4">
+      <div class="step-header">
+        <div class="step-tag">Step 4 of 5</div>
+        <h1 class="step-title">Your assessment report</h1>
+        <p class="step-desc">Based on the supplier's publicly published contract terms and your context, here is your gap analysis and risk assessment.</p>
+      </div>
+      <div id="assessment-loading" class="loading-row" style="display:none;"><div class="spin"></div><span>Analysing contract terms against your regulatory framework…</span></div>
+      <div id="assessment-result"></div>
+    </div>
+
+    <!-- STEP 5: CONTROLS REGISTER -->
+    <div class="step-panel" id="step-5">
+      <div class="step-header">
+        <div class="step-tag">Step 5 of 5</div>
+        <h1 class="step-title">Your controls register</h1>
+        <p class="step-desc">Your ongoing supplier controls — mandatory obligations you must track, and optional controls recommended for best practice.</p>
+      </div>
+      <div id="controls-loading" class="loading-row" style="display:none;"><div class="spin"></div><span>Generating mandatory and optional controls…</span></div>
+      <div id="controls-result"></div>
+    </div>
+
+  </div><!-- end main-content -->
+</div><!-- end assess-layout -->
+
+<div class="footer-bottom" style="margin-top:0;">© 2025 ClearClause. Not legal advice.</div>
+
+<script>
+let currentStep = 1;
+let selectedSupplier = '';
+let checkedItems = new Set();
+let assessmentData = null;
+
+// Pre-select supplier from URL param
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const sup = params.get('supplier');
+  if (sup) {
+    const map = { 'Microsoft': 'Microsoft', 'AWS': 'Amazon Web Services (AWS)', 'Google Cloud': 'Google Cloud' };
+    const key = map[sup] || sup;
+    selectSupplier(key);
+    goToStep(2);
+  }
+});
+
+function selectSupplier(name) {
+  document.querySelectorAll('.supplier-sel-card').forEach(c => c.classList.remove('selected'));
+  const el = document.getElementById('sc-' + name);
+  if (el) el.classList.add('selected');
+  selectedSupplier = name;
+}
+
+function toggleCheck(el) {
+  const opt = el.closest('.checkbox-option');
+  if (el.checked) { checkedItems.add(el.value); opt.classList.add('selected'); }
+  else { checkedItems.delete(el.value); opt.classList.remove('selected'); }
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  currentStep = n;
+  const pct = (n / 5) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  for (let i = 1; i <= 5; i++) {
+    const circle = document.getElementById('sc-' + i);
+    const label = document.getElementById('sl-' + i);
+    if (i < n) { circle.className = 'ss-circle done'; circle.textContent = '✓'; label.className = 'ss-label done'; }
+    else if (i === n) { circle.className = 'ss-circle active'; circle.textContent = i; label.className = 'ss-label active'; }
+    else { circle.className = 'ss-circle'; circle.textContent = i; label.className = 'ss-label'; }
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevStep(n) { goToStep(n - 1); }
+
+function nextStep(n) {
+  if (n === 1) {
+    const fname = document.getElementById('d-fname').value.trim();
+    const lname = document.getElementById('d-lname').value.trim();
+    const email = document.getElementById('d-email').value.trim();
+    const company = document.getElementById('d-company').value.trim();
+    const role = document.getElementById('d-role').value.trim();
+    if (!fname || !lname || !email || !company || !role) {
+      document.getElementById('step1-err').innerHTML = '<p class="err-msg">Please fill in all required fields.</p>'; return;
+    }
+    if (!email.includes('@')) {
+      document.getElementById('step1-err').innerHTML = '<p class="err-msg">Please enter a valid email address.</p>'; return;
+    }
+    document.getElementById('step1-err').innerHTML = '';
+  }
+  if (n === 2) {
+    if (!selectedSupplier) { document.getElementById('step2-err').innerHTML = '<p class="err-msg">Please select a supplier.</p>'; return; }
+    if (!document.getElementById('s-industry').value) { document.getElementById('step2-err').innerHTML = '<p class="err-msg">Please select your industry.</p>'; return; }
+    document.getElementById('step2-err').innerHTML = '';
+  }
+  goToStep(n + 1);
+}
+
+async function runAssessment() {
+  goToStep(4);
+  document.getElementById('assessment-loading').style.display = 'flex';
+
+  const industry = document.getElementById('s-industry').value;
+  const mode = document.getElementById('s-mode').value;
+  const other = document.getElementById('cq-other').value.trim();
+  const contextFlags = Array.from(checkedItems).join(', ');
+  const company = document.getElementById('d-company').value.trim();
+  const fname = document.getElementById('d-fname').value.trim();
+
+  const modeText = mode === 'new' ? 'No contract signed yet — focus on what must be negotiated or added before signing.' : 'Existing contract in place — focus on gaps and controls needed now.';
+
+  const prompt = `You are a specialist contract compliance and supplier risk advisor with deep expertise in Australian regulatory frameworks.
+
+Client: ${fname} at ${company}
+Supplier: ${selectedSupplier}
+Industry: ${industry}
+Situation: ${modeText}
+Context flags selected by client: ${contextFlags || 'none specified'}
+${other ? 'Additional context: ' + other : ''}
+
+The supplier publishes their standard contract terms publicly. Assess those known public terms against the obligations of the client's industry and the specific context flags they have provided.
+
+Respond ONLY with a valid JSON object. No markdown, no backticks, no preamble:
+
+{
+  "riskLevel": "High" | "Medium" | "Low",
+  "riskRationale": "One sentence explaining overall risk",
+  "publicContractSource": "Specific public document name",
+  "regulatoryFramework": {
+    "primaryRegulators": ["2-4 regulators"],
+    "keyLegislation": ["3-6 laws/standards"],
+    "australianSpecific": ["1-4 AU-specific rules relevant to selected context"]
+  },
+  "contextInsights": ["2-3 specific observations based on the context flags the client selected — e.g. if they selected offshore_processing, what does this supplier's terms say about that"],
+  "contractGaps": [
+    {"severity": "critical"|"moderate"|"advisory", "clause": "Clause name", "detail": "What is absent or problematic in this supplier's public terms given the client's specific context. 2 sentences."}
+  ],
+  "mustHaveClauses": ["5-8 clauses the client must add or negotiate given their context"],
+  "summary": "4-5 sentence plain-English summary specific to this supplier, this industry, and the context the client provided."
+}
+
+Provide 6-8 contractGaps tailored to the context flags. Be specific to this supplier's known public terms.`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1400, messages: [{ role: "user", content: prompt }] })
+    });
+    const data = await res.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    assessmentData = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    document.getElementById('assessment-loading').style.display = 'none';
+    renderAssessment(assessmentData);
+  } catch(e) {
+    document.getElementById('assessment-loading').style.display = 'none';
+    document.getElementById('assessment-result').innerHTML = '<p class="err-msg">Assessment failed — please try again.</p>';
+  }
+}
+
+function renderAssessment(r) {
+  const rc = r.riskLevel === 'High' ? 'risk-high' : r.riskLevel === 'Medium' ? 'risk-medium' : 'risk-low';
+  const regs = [
+    ...(r.regulatoryFramework.primaryRegulators||[]).map(x=>`<span class="chip chip-primary">${esc(x)}</span>`),
+    ...(r.regulatoryFramework.keyLegislation||[]).map(x=>`<span class="chip">${esc(x)}</span>`),
+    ...(r.regulatoryFramework.australianSpecific||[]).map(x=>`<span class="chip">${esc(x)}</span>`)
+  ].join('');
+  const insights = (r.contextInsights||[]).map(i => `<li style="font-size:14px;color:var(--ink-soft);padding:6px 0;border-bottom:1px solid var(--paper-warm);font-weight:300;">${esc(i)}</li>`).join('');
+  const gaps = (r.contractGaps||[]).map(g => {
+    const dc = g.severity === 'critical' ? 'd-critical' : g.severity === 'moderate' ? 'd-moderate' : 'd-advisory';
+    return `<li class="gap-item"><span class="sev-dot ${dc}"></span><span><span class="gap-clause">${esc(g.clause)}: </span><span style="color:var(--ink-soft);font-weight:300;">${esc(g.detail)}</span></span></li>`;
+  }).join('');
+  const clauses = (r.mustHaveClauses||[]).map(c=>`<span class="chip">${esc(c)}</span>`).join('');
+  const mode = document.getElementById('s-mode').value === 'new' ? 'New contract evaluation' : 'Existing contract review';
+
+  document.getElementById('assessment-result').innerHTML = `
+<div class="result-wrapper">
+  <div class="result-top">
+    <div>
+      <div class="result-supplier-name">${esc(selectedSupplier)}</div>
+      <div class="result-meta">${esc(document.getElementById('s-industry').value)} · ${mode}</div>
+      <div class="result-meta" style="margin-top:2px;">Source: ${esc(r.publicContractSource||'Publicly published contract terms')}</div>
+    </div>
+    <span class="risk-pill ${rc}">${esc(r.riskLevel)} risk</span>
+  </div>
+  <div class="result-body">
+    <div class="r-section"><p class="r-section-title">Risk rationale</p><p class="prose">${esc(r.riskRationale)}</p></div>
+    <div class="r-section"><p class="r-section-title">Applicable regulatory framework</p><div class="chip-group">${regs}</div></div>
+    ${insights ? `<div class="r-section"><p class="r-section-title">Insights based on your context</p><ul style="list-style:none;">${insights}</ul></div>` : ''}
+    <div class="r-section">
+      <p class="r-section-title">Contract gap analysis</p>
+      <ul class="gap-list">${gaps}</ul>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--ink-muted);">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--warn);margin-right:5px;"></span>Critical</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#d4840a;margin-right:5px;"></span>Moderate</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent-mid);margin-right:5px;"></span>Advisory</span>
+      </div>
+    </div>
+    <div class="r-section"><p class="r-section-title">Must-have clauses to add / negotiate</p><div class="chip-group">${clauses}</div></div>
+    <div class="r-section"><p class="r-section-title">Assessment summary</p><p class="prose">${esc(r.summary)}</p></div>
+  </div>
+  <div class="result-footer">
+    <p style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:12px;">Do you want to generate an ongoing controls register for this supplier?</p>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px;font-weight:300;">A controls register gives your team the mandatory and optional activities to manage ${esc(selectedSupplier)} on an ongoing basis — with frequencies, owners, and evidence requirements.</p>
+    <div style="display:flex;gap:10px;">
+      <button class="nav-btn-next" onclick="generateControls()">Yes — generate controls register →</button>
+      <button class="nav-btn-back" onclick="window.print()">Export this report</button>
+    </div>
+  </div>
+</div>`;
+}
+
+async function generateControls() {
+  if (!assessmentData) return;
+  goToStep(5);
+  document.getElementById('controls-loading').style.display = 'flex';
+
+  const industry = document.getElementById('s-industry').value;
+  const contextFlags = Array.from(checkedItems).join(', ');
+
+  const prompt = `You are a GRC (Governance, Risk & Compliance) specialist for Australian organisations.
+
+Based on this contract assessment:
+- Supplier: ${selectedSupplier}
+- Industry: ${industry}
+- Risk level: ${assessmentData.riskLevel}
+- Key gaps identified: ${(assessmentData.contractGaps||[]).map(g=>g.clause).join(', ')}
+- Client context: ${contextFlags || 'standard'}
+- Regulations: ${[...(assessmentData.regulatoryFramework.primaryRegulators||[]), ...(assessmentData.regulatoryFramework.keyLegislation||[])].join(', ')}
+
+Generate a practical ongoing supplier controls register split into MANDATORY controls (legally or regulatorily required) and OPTIONAL controls (best practice, recommended).
+
+Respond ONLY with valid JSON. No markdown, no backticks:
+
+{
+  "registerTitle": "Controls register title",
+  "objective": "One sentence objective",
+  "reviewCycle": "Recommended review cycle",
+  "mandatoryControls": [
+    {
+      "id": "M01",
+      "controlArea": "Area name",
+      "control": "Specific control activity (1-2 sentences)",
+      "frequency": "Monthly" | "Quarterly" | "Annual" | "Event-driven",
+      "owner": "Suggested owner role",
+      "evidenceRequired": "What evidence must be collected",
+      "regulatoryLink": "Specific regulation or standard",
+      "rationale": "Why this is mandatory (one sentence)"
+    }
+  ],
+  "optionalControls": [
+    {
+      "id": "O01",
+      "controlArea": "Area name",
+      "control": "Specific control activity (1-2 sentences)",
+      "frequency": "Monthly" | "Quarterly" | "Annual" | "Event-driven",
+      "owner": "Suggested owner role",
+      "evidenceRequired": "What evidence must be collected",
+      "benefit": "Why this control adds value (one sentence)"
+    }
+  ],
+  "implementationNotes": "3-4 sentences of practical advice for implementing this register for this specific supplier."
+}
+
+Generate 6-8 mandatory controls and 4-6 optional controls. Be specific and actionable for ${selectedSupplier} in ${industry}.`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1600, messages: [{ role: "user", content: prompt }] })
+    });
+    const data = await res.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    const cr = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    document.getElementById('controls-loading').style.display = 'none';
+    renderControls(cr);
+  } catch(e) {
+    document.getElementById('controls-loading').style.display = 'none';
+    document.getElementById('controls-result').innerHTML = '<p class="err-msg">Controls generation failed — please try again.</p>';
+  }
+}
+
+function renderControls(cr) {
+  const fc = f => f==='Monthly'?'freq-monthly':f==='Quarterly'?'freq-quarterly':f==='Annual'?'freq-annual':'freq-event';
+
+  const mRows = (cr.mandatoryControls||[]).map(c=>`<tr>
+    <td style="font-size:11px;color:var(--ink-muted);">${esc(c.id)}</td>
+    <td style="font-weight:500;color:var(--ink);font-size:13px;">${esc(c.controlArea)}</td>
+    <td style="font-size:13px;">${esc(c.control)}</td>
+    <td><span class="freq-badge ${fc(c.frequency)}">${esc(c.frequency)}</span></td>
+    <td style="font-size:12px;">${esc(c.owner)}</td>
+    <td style="font-size:12px;">${esc(c.evidenceRequired)}</td>
+    <td style="font-size:11px;color:var(--ink-muted);">${esc(c.regulatoryLink)}</td>
+  </tr>`).join('');
+
+  const oRows = (cr.optionalControls||[]).map(c=>`<tr>
+    <td style="font-size:11px;color:var(--ink-muted);">${esc(c.id)}</td>
+    <td style="font-weight:500;color:var(--ink);font-size:13px;">${esc(c.controlArea)}</td>
+    <td style="font-size:13px;">${esc(c.control)}</td>
+    <td><span class="freq-badge ${fc(c.frequency)}">${esc(c.frequency)}</span></td>
+    <td style="font-size:12px;">${esc(c.owner)}</td>
+    <td style="font-size:12px;">${esc(c.evidenceRequired)}</td>
+    <td style="font-size:12px;color:var(--ok);">${esc(c.benefit)}</td>
+  </tr>`).join('');
+
+  const fname = document.getElementById('d-fname').value;
+  const company = document.getElementById('d-company').value;
+
+  document.getElementById('controls-result').innerHTML = `
+<div class="result-wrapper">
+  <div class="result-top">
+    <div>
+      <div class="result-supplier-name">${esc(cr.registerTitle)}</div>
+      <div class="result-meta">${esc(selectedSupplier)} · ${esc(company)} · Review cycle: ${esc(cr.reviewCycle)}</div>
+    </div>
+    <span class="risk-pill" style="background:var(--accent-pale);color:var(--accent);">${(cr.mandatoryControls||[]).length + (cr.optionalControls||[]).length} controls</span>
+  </div>
+  <div class="result-body">
+    <div class="r-section"><p class="r-section-title">Objective</p><p class="prose">${esc(cr.objective)}</p></div>
+
+    <div class="r-section">
+      <p class="r-section-title" style="color:var(--warn);">Mandatory controls — ${(cr.mandatoryControls||[]).length} required</p>
+      <div class="mandatory-note">These controls are required based on your regulatory obligations and the gaps identified in the assessment. Failure to implement may expose your organisation to regulatory risk.</div>
+      <div style="overflow-x:auto;">
+        <table class="controls-table">
+          <thead><tr><th>ID</th><th>Area</th><th>Control activity</th><th>Frequency</th><th>Owner</th><th>Evidence required</th><th>Regulatory link</th></tr></thead>
+          <tbody>${mRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="r-section">
+      <p class="r-section-title" style="color:var(--amber);">Optional controls — ${(cr.optionalControls||[]).length} recommended</p>
+      <div class="optional-note">These controls are recommended best practice. While not strictly mandated, implementing them significantly reduces your supplier risk exposure.</div>
+      <div style="overflow-x:auto;">
+        <table class="controls-table">
+          <thead><tr><th>ID</th><th>Area</th><th>Control activity</th><th>Frequency</th><th>Owner</th><th>Evidence required</th><th>Benefit</th></tr></thead>
+          <tbody>${oRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="r-section"><p class="r-section-title">Implementation notes</p><p class="prose">${esc(cr.implementationNotes)}</p></div>
+  </div>
+  <div class="result-footer">
+    <p style="font-size:14px;font-weight:500;color:var(--ink);margin-bottom:12px;">Assessment complete, ${esc(fname)}.</p>
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px;font-weight:300;">Your gap analysis and controls register for ${esc(selectedSupplier)} are ready. Export below or start a new assessment.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="nav-btn-next" onclick="window.print()">Export full report (PDF)</button>
+      <a href="assess.html" class="nav-btn-back" style="text-decoration:none;padding:10px 22px;">Start new assessment</a>
+      <a href="contact.html" class="nav-btn-back" style="text-decoration:none;padding:10px 22px;">Talk to an advisor</a>
+    </div>
+  </div>
+</div>`;
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+</script>
+</body>
+</html>
